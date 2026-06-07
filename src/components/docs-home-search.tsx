@@ -94,7 +94,7 @@ export function DocsHomeSearch({ docs }: { docs: DocMeta[] }) {
                   href={`/docs/${doc.slug}`}
                   key={doc.slug}
                 >
-                  <span className="flex min-w-0 items-center gap-2">
+                  <span className="flex min-w-0 flex-1 items-center gap-2">
                     <span className="shrink-0 text-sm font-medium text-slate-400">
                       [{doc.group}]
                     </span>
@@ -103,19 +103,6 @@ export function DocsHomeSearch({ docs }: { docs: DocMeta[] }) {
                         {doc.title}
                       </span>
                     </span>
-                  </span>
-                  <span className="ml-auto flex shrink-0 items-center gap-2">
-                    {doc.tags.slice(0, 2).map((tag) => (
-                      <span
-                        className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 ring-1 ring-emerald-100"
-                        key={tag}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                    <time className="text-xs text-slate-400" dateTime={doc.date}>
-                      {formatDate(doc.date)}
-                    </time>
                   </span>
                 </Link>
               ))}
@@ -127,16 +114,4 @@ export function DocsHomeSearch({ docs }: { docs: DocMeta[] }) {
       )}
     </div>
   );
-}
-
-function formatDate(date: string) {
-  if (!date) {
-    return "未设置日期";
-  }
-
-  return new Intl.DateTimeFormat("zh-CN", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(new Date(`${date}T00:00:00`));
 }
