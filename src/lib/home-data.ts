@@ -1,31 +1,26 @@
 import {
-  BookOpenText,
   Bot,
   Boxes,
-  Compass,
   FileText,
   Image,
   Lightbulb,
   ListChecks,
   PenLine,
   Search,
-  Wrench,
 } from "lucide-react";
 
 export const navItems = [
-  { label: "文档", href: "#docs" },
+  { label: "AI生成", href: "#ai-generation" },
+  { label: "AI文档", href: "#docs" },
   { label: "在线工具", href: "#tools" },
-  { label: "导航", href: "#navigation" },
-  { label: "AI 工具", href: "#ai-tools" },
+  { label: "一站式导航", href: "#navigation" },
 ];
 
 export const quickLinks = [
-  "AI 教程",
-  "AI 提示词",
-  "AI Skills",
-  "效率工具",
-  "AI 工具导航",
-  "电商素材",
+  { label: "AI生成", href: "#ai-generation" },
+  { label: "AI文档", href: "#docs" },
+  { label: "在线工具", href: "#tools" },
+  { label: "一站式导航", href: "#navigation" },
 ];
 
 export const latestDocs = [
@@ -55,55 +50,87 @@ export const latestDocs = [
   },
 ];
 
-export const coreEntries = [
-  {
-    title: "知识文档",
-    description: "沉淀 AI 教程、提示词、AI Skills 和项目实践。",
-    href: "#docs",
-    icon: BookOpenText,
-    tone: "blue",
-  },
-  {
-    title: "在线实用工具",
-    description: "聚合格式化、转换、检测、计算等高频小工具。",
-    href: "#tools",
-    icon: Wrench,
-    tone: "emerald",
-  },
-  {
-    title: "一站式导航",
-    description: "整理 AI 工具、资源网站、创作平台和工作流入口。",
-    href: "#navigation",
-    icon: Compass,
-    tone: "violet",
-  },
-  {
-    title: "AI 工具",
-    description: "通过参数化表单生成文案、脚本、图片方案等结果。",
-    href: "#ai-tools",
-    icon: Bot,
-    tone: "amber",
-  },
-];
-
-export const hotAiTools = [
+export const aiGenerationTools = [
   {
     title: "爆款文案生成",
     description: "输入产品、平台、受众和语气，生成多版可测试文案。",
-    status: "规划中",
+    category: "内容营销",
     icon: PenLine,
   },
   {
     title: "视频脚本生成",
     description: "按主题、时长、镜头节奏输出短视频脚本草案。",
-    status: "规划中",
+    category: "短视频",
     icon: FileText,
   },
   {
     title: "电商主图方案",
     description: "围绕商品、尺寸、卖点和风格生成主图创意方案。",
-    status: "规划中",
+    category: "电商设计",
     icon: Image,
+  },
+  {
+    title: "卖点提炼助手",
+    description: "从商品参数和用户痛点中提炼可落地的销售卖点。",
+    category: "销售转化",
+    icon: Bot,
+  },
+  {
+    title: "标题变体生成",
+    description: "根据平台和受众生成多组可 A/B 测试的标题方向。",
+    category: "增长测试",
+    icon: PenLine,
+  },
+];
+
+export const siteNavigationLinks = [
+  {
+    title: "OpenAI",
+    description: "AI 模型、API 与产品文档",
+    href: "https://openai.com/",
+    label: "AI",
+  },
+  {
+    title: "GitHub",
+    description: "代码托管与开源项目",
+    href: "https://github.com/",
+    label: "代码",
+  },
+  {
+    title: "Hugging Face",
+    description: "模型、数据集与 AI 应用",
+    href: "https://huggingface.co/",
+    label: "模型",
+  },
+  {
+    title: "MDN",
+    description: "Web 标准和前端文档",
+    href: "https://developer.mozilla.org/",
+    label: "文档",
+  },
+  {
+    title: "Vercel",
+    description: "前端部署与 Next.js 生态",
+    href: "https://vercel.com/",
+    label: "部署",
+  },
+  {
+    title: "Next.js",
+    description: "React 全栈框架文档",
+    href: "https://nextjs.org/",
+    label: "框架",
+  },
+  {
+    title: "Tailwind CSS",
+    description: "实用优先 CSS 框架",
+    href: "https://tailwindcss.com/",
+    label: "样式",
+  },
+  {
+    title: "Product Hunt",
+    description: "新产品与工具发现",
+    href: "https://www.producthunt.com/",
+    label: "灵感",
   },
 ];
 
@@ -120,19 +147,24 @@ export const searchDocuments = [
     description: item.summary,
     type: item.category,
   })),
-  ...coreEntries.map((item) => ({
-    title: item.title,
-    description: item.description,
+  ...quickLinks.map((item) => ({
+    title: item.label,
+    description: "首页核心入口",
     type: "核心入口",
   })),
-  ...hotAiTools.map((item) => ({
+  ...aiGenerationTools.map((item) => ({
     title: item.title,
     description: item.description,
-    type: "AI 工具",
+    type: "AI生成",
   })),
   ...utilityTools.map((item) => ({
     title: item.name,
     description: item.tag,
     type: "在线工具",
+  })),
+  ...siteNavigationLinks.map((item) => ({
+    title: item.title,
+    description: item.description,
+    type: "一站式导航",
   })),
 ];

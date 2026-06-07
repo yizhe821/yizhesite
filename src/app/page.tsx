@@ -1,34 +1,25 @@
 import {
   ArrowUpRight,
   BookOpenText,
-  ChevronRight,
-  Clock3,
+  Compass,
   Flame,
-  LayoutGrid,
 } from "lucide-react";
+import { AiGenerationSection } from "@/components/ai-generation-section";
 import { SearchPanel } from "@/components/search-panel";
 import {
-  coreEntries,
-  hotAiTools,
   latestDocs,
   navItems,
   quickLinks,
+  siteNavigationLinks,
   utilityTools,
 } from "@/lib/home-data";
-
-const toneClasses: Record<string, string> = {
-  blue: "bg-blue-50 text-blue-700 ring-blue-100",
-  emerald: "bg-emerald-50 text-emerald-700 ring-emerald-100",
-  violet: "bg-violet-50 text-violet-700 ring-violet-100",
-  amber: "bg-amber-50 text-amber-700 ring-amber-100",
-};
 
 export default function Home() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-slate-50 text-slate-950">
       <AmbientBackground />
 
-      <header className="sticky top-0 z-20 border-b border-gray-200 bg-white/95 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-6 lg:px-8">
           <a className="flex items-center gap-3" href="#">
             <span className="flex size-10 items-center justify-center rounded-lg bg-blue-600 text-base font-semibold text-white shadow-sm">
@@ -56,17 +47,17 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="relative z-10 px-4 py-8 md:px-6 md:py-10 lg:px-8 lg:py-12">
+      <section className="relative z-40 px-4 py-8 md:px-6 md:py-10 lg:px-8 lg:py-12">
         <div className="mx-auto max-w-4xl">
           <SearchPanel />
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             {quickLinks.map((link) => (
               <a
                 className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-slate-600 shadow-sm transition-all duration-200 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-                href="#navigation"
-                key={link}
+                href={link.href}
+                key={link.label}
               >
-                {link}
+                {link.label}
               </a>
             ))}
           </div>
@@ -74,85 +65,84 @@ export default function Home() {
       </section>
 
       <section className="relative z-10 px-4 pb-12 md:px-6 md:pb-16 lg:px-8 lg:pb-20">
-        <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1fr_1.3fr_1fr]">
-          <section className="min-w-0" id="docs">
-            <SectionHeading
-              icon={<BookOpenText className="size-5" />}
-              label="最新文档"
-              title="内容沉淀"
-            />
-            <div className="mt-4 grid gap-3">
-              {latestDocs.map((doc) => (
-                <article
-                  className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-200 hover:border-blue-200 hover:shadow-md"
-                  key={doc.title}
-                >
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
-                      {doc.category}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-xs text-slate-400">
-                      <Clock3 className="size-3.5" />
-                      {doc.date}
-                    </span>
-                  </div>
-                  <h2 className="text-base font-semibold tracking-tight text-slate-950">
-                    {doc.title}
-                  </h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-500">{doc.summary}</p>
-                </article>
-              ))}
-            </div>
+        <div className="mx-auto grid max-w-7xl gap-8">
+          <section id="ai-generation">
+            <AiGenerationSection />
           </section>
 
-          <section className="min-w-0" id="navigation">
-            <SectionHeading
-              icon={<LayoutGrid className="size-5" />}
-              label="核心入口"
-              title="板块导航"
-            />
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              {coreEntries.map((entry) => {
-                const Icon = entry.icon;
-
-                return (
+          <div className="grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)]">
+            <section className="min-w-0" id="docs">
+              <SectionTitle
+                accentClassName="bg-emerald-400"
+                icon={<BookOpenText className="size-5" />}
+                title="最新文档"
+              />
+              <div className="mt-4 overflow-hidden rounded-xl border border-gray-200 bg-white/90 shadow-sm backdrop-blur">
+                {latestDocs.map((doc) => (
                   <a
-                    className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:border-blue-200 hover:shadow-md"
-                    href={entry.href}
-                    key={entry.title}
+                    className="group block cursor-pointer border-b border-gray-100 px-4 py-3.5 transition-colors duration-200 last:border-b-0 hover:bg-blue-50/60"
+                    href="#"
+                    key={doc.title}
                   >
-                    <span
-                      className={`inline-flex size-11 items-center justify-center rounded-lg ring-1 ${toneClasses[entry.tone]}`}
-                    >
-                      <Icon className="size-5" />
+                    <span className="mb-1.5 inline-flex rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 ring-1 ring-emerald-100">
+                      {doc.category}
                     </span>
-                    <span className="mt-5 flex items-center justify-between gap-3">
-                      <strong className="text-lg font-semibold tracking-tight text-slate-950">
-                        {entry.title}
+                    <h3 className="text-sm font-semibold leading-6 text-slate-500 transition-colors duration-200 group-hover:text-blue-700">
+                      <span className="relative inline after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-blue-600 after:transition-transform after:duration-200 group-hover:after:scale-x-100">
+                        {doc.title}
+                      </span>
+                    </h3>
+                  </a>
+                ))}
+              </div>
+            </section>
+
+            <section className="min-w-0" id="navigation">
+              <SectionTitle
+                accentClassName="bg-amber-400"
+                icon={<Compass className="size-5" />}
+                title="一站式导航"
+              />
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                {siteNavigationLinks.map((item) => (
+                  <a
+                    className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white/90 p-4 shadow-sm backdrop-blur transition-all duration-200 hover:border-blue-200 hover:bg-blue-50/80 hover:shadow-md"
+                    href={item.href}
+                    key={item.title}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-xs font-semibold text-slate-600 transition-all duration-200 group-hover:bg-blue-600 group-hover:text-white">
+                      {item.label}
+                    </span>
+                    <span className="min-w-0">
+                      <strong className="block truncate text-sm font-semibold text-slate-950">
+                        {item.title}
                       </strong>
-                      <ChevronRight className="size-5 text-slate-300" />
-                    </span>
-                    <span className="mt-2 block text-sm leading-6 text-slate-500">
-                      {entry.description}
+                      <span className="mt-0.5 block truncate text-xs text-slate-500">
+                        {item.description}
+                      </span>
                     </span>
                   </a>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            </section>
+          </div>
 
-            <div className="mt-6" id="tools">
-              <SectionHeading
-                icon={<Flame className="size-5" />}
-                label="在线工具"
-                title="第一批轻量工具"
-              />
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <section id="tools">
+            <SectionTitle
+              accentClassName="bg-cyan-400"
+              icon={<Flame className="size-5" />}
+              title="在线工具"
+            />
+            <div className="mt-4">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {utilityTools.map((tool) => {
                   const Icon = tool.icon;
 
                   return (
                     <a
-                      className="flex items-center justify-between gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all duration-200 hover:border-blue-200 hover:shadow-md"
+                      className="flex min-h-28 items-center justify-between gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-all duration-200 hover:border-blue-200 hover:bg-blue-50/70 hover:shadow-sm"
                       href="#"
                       key={tool.name}
                     >
@@ -174,43 +164,6 @@ export default function Home() {
               </div>
             </div>
           </section>
-
-          <section className="min-w-0" id="ai-tools">
-            <SectionHeading
-              icon={<Flame className="size-5" />}
-              label="热门 AI 工具"
-              title="商业化入口"
-            />
-            <div className="mt-4 grid gap-3">
-              {hotAiTools.map((tool) => {
-                const Icon = tool.icon;
-
-                return (
-                  <article
-                    className="rounded-xl border border-blue-100 bg-white p-5 shadow-sm transition-all duration-200 hover:border-blue-200 hover:shadow-md"
-                    key={tool.title}
-                  >
-                    <div className="mb-4 flex items-center justify-between gap-4">
-                      <span className="flex size-11 items-center justify-center rounded-lg bg-blue-50 text-blue-700 ring-1 ring-blue-100">
-                        <Icon className="size-5" />
-                      </span>
-                      <span className="rounded-lg bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">
-                        {tool.status}
-                      </span>
-                    </div>
-                    <h2 className="text-base font-semibold tracking-tight text-slate-950">
-                      {tool.title}
-                    </h2>
-                    <p className="mt-2 text-sm leading-6 text-slate-500">{tool.description}</p>
-                    <button className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 active:scale-95">
-                      查看规划
-                      <ArrowUpRight className="size-4" />
-                    </button>
-                  </article>
-                );
-              })}
-            </div>
-          </section>
         </div>
       </section>
     </main>
@@ -230,24 +183,27 @@ function AmbientBackground() {
   );
 }
 
-function SectionHeading({
+function SectionTitle({
+  accentClassName,
   icon,
-  label,
   title,
 }: {
+  accentClassName: string;
   icon: React.ReactNode;
-  label: string;
   title: string;
 }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <div>
-        <div className="flex items-center gap-2 text-sm font-medium text-blue-700">
+      <div className="flex items-center gap-2 text-lg font-semibold tracking-tight text-slate-950 md:text-xl">
+        <span className="flex size-8 items-center justify-center rounded-lg bg-white text-blue-700 shadow-sm ring-1 ring-gray-200">
           {icon}
-          {label}
-        </div>
-        <h2 className="mt-1 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl">
-          {title}
+        </span>
+        <h2 className="relative inline-block">
+          <span
+            aria-hidden="true"
+            className={`absolute bottom-0 left-0 z-0 h-1.5 w-full rounded-full opacity-70 ${accentClassName}`}
+          />
+          <span className="relative z-10">{title}</span>
         </h2>
       </div>
     </div>
