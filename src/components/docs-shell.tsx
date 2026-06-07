@@ -2,12 +2,14 @@ import Link from "next/link";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
-  ArrowLeft,
   BookOpenText,
   CalendarDays,
+  FileText,
   FolderOpen,
   Tags,
 } from "lucide-react";
+import { DocsHomeSearch } from "@/components/docs-home-search";
+import { DocsSidebar } from "@/components/docs-sidebar";
 import type { DocArticle, DocGroupTree } from "@/lib/docs";
 
 const markdownComponents: Components = {
@@ -96,7 +98,7 @@ export function DocsShell({
   activeDoc,
   groupTree,
 }: {
-  activeDoc: DocArticle;
+  activeDoc?: DocArticle;
   groupTree: DocGroupTree[];
 }) {
   const totalDocs = groupTree.reduce((count, item) => count + item.docs.length, 0);
@@ -107,112 +109,138 @@ export function DocsShell({
 
       <section className="relative z-10 px-4 py-6 md:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[288px_minmax(0,1fr)]">
-          <aside className="min-w-0 lg:sticky lg:top-[88px] lg:max-h-[calc(100vh-112px)] lg:overflow-y-auto">
-            <div className="rounded-xl border border-gray-200 bg-white/95 p-4 shadow-sm backdrop-blur">
-              <Link
-                className="mb-4 inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-medium text-slate-500 transition-colors hover:bg-slate-100 hover:text-blue-700"
-                href="/"
-              >
-                <ArrowLeft className="size-4" />
-                返回首页
-              </Link>
+          <DocsSidebar
+            activeGroup={activeDoc?.group}
+            activeSlug={activeDoc?.slug}
+            groupTree={groupTree}
+            key={activeDoc?.slug ?? "docs-home"}
+          />
 
-              <div className="mb-5 flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
-                <div className="flex items-center gap-2">
-                  <span className="flex size-9 items-center justify-center rounded-lg bg-blue-50 text-blue-700 ring-1 ring-blue-100">
-                    <BookOpenText className="size-5" />
-                  </span>
-                  <div>
-                    <h1 className="text-base font-semibold tracking-tight text-slate-950">
-                      文档目录
-                    </h1>
-                    <p className="text-xs text-slate-500">{totalDocs} 篇静态文档</p>
-                  </div>
-                </div>
-              </div>
-
-              <nav className="space-y-5" aria-label="文档目录">
-                {groupTree.map((section) => (
-                  <section key={section.group}>
-                    <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase text-slate-400">
-                      <FolderOpen className="size-3.5" />
-                      {section.group}
-                    </div>
-                    <div className="space-y-1">
-                      {section.docs.map((doc) => {
-                        const isActive = doc.slug === activeDoc.slug;
-
-                        return (
-                          <Link
-                            className={`block rounded-lg px-3 py-2.5 text-sm transition-all duration-200 ${
-                              isActive
-                                ? "bg-blue-50 font-semibold text-blue-700 ring-1 ring-blue-100"
-                                : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
-                            }`}
-                            href={`/docs/${doc.slug}`}
-                            key={doc.slug}
-                          >
-                            <span className="line-clamp-2">{doc.title}</span>
-                            <time className="mt-1 block text-xs font-normal text-slate-400" dateTime={doc.date}>
-                              {formatDate(doc.date)}
-                            </time>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </section>
-                ))}
-              </nav>
-            </div>
-          </aside>
-
-          <article className="min-w-0 rounded-xl border border-gray-200 bg-white/95 p-5 shadow-sm backdrop-blur md:p-8 lg:p-10">
-            <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
-              <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1 font-medium text-blue-700 ring-1 ring-blue-100">
-                <FolderOpen className="size-4" />
-                {activeDoc.group}
-              </span>
-              <time
-                className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1 text-slate-500"
-                dateTime={activeDoc.date}
-              >
-                <CalendarDays className="size-4" />
-                {formatDate(activeDoc.date)}
-              </time>
-            </div>
-
-            <header className="mt-5 border-b border-slate-100 pb-6">
-              <h2 className="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
-                {activeDoc.title}
-              </h2>
-              <p className="mt-3 max-w-3xl text-base leading-7 text-slate-500">
-                {activeDoc.summary}
-              </p>
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500">
-                  <Tags className="size-4" />
-                  标签
-                </span>
-                {activeDoc.tags.map((tag) => (
-                  <span
-                    className="rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-100"
-                    key={tag}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </header>
-
-            <div className="markdown-body">
-              <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
-                {activeDoc.content}
-              </ReactMarkdown>
-            </div>
-          </article>
+          {activeDoc ? (
+            <DocArticle activeDoc={activeDoc} />
+          ) : (
+            <DocsHome groupTree={groupTree} totalDocs={totalDocs} />
+          )}
         </div>
       </section>
     </main>
+  );
+}
+
+function DocsHome({
+  groupTree,
+  totalDocs,
+}: {
+  groupTree: DocGroupTree[];
+  totalDocs: number;
+}) {
+  const docs = groupTree
+    .flatMap((section) => section.docs)
+    .sort((left, right) => right.date.localeCompare(left.date) || left.order - right.order);
+
+  return (
+    <article className="min-w-0 rounded-xl border border-gray-200 bg-white/95 p-5 shadow-sm backdrop-blur md:p-8 lg:p-10">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+        <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1 font-medium text-blue-700 ring-1 ring-blue-100">
+          <BookOpenText className="size-4" />
+          AI 文档
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1 text-slate-500">
+          <FileText className="size-4" />
+          {totalDocs} 篇
+        </span>
+      </div>
+
+      <header className="mt-5 flex flex-col gap-4 border-b border-slate-100 pb-6 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
+          AI 文档
+        </h1>
+        <DocsHomeSearch docs={docs} />
+      </header>
+
+      <div className="mt-6 divide-y divide-slate-100">
+        {docs.map((doc) => (
+          <Link
+            className="group flex min-h-12 items-center justify-between gap-4 py-3"
+            href={`/docs/${doc.slug}`}
+            key={doc.slug}
+          >
+            <span className="flex min-w-0 items-center gap-2">
+              <span className="shrink-0 text-sm font-medium text-slate-400">
+                [{doc.group}]
+              </span>
+              <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap pb-1">
+                <span className="relative inline text-sm font-medium text-slate-500 transition-colors duration-200 after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-blue-600 after:transition-transform after:duration-200 group-hover:text-blue-700 group-hover:after:scale-x-100">
+                  {doc.title}
+                </span>
+              </span>
+            </span>
+            <span className="ml-auto flex shrink-0 items-center gap-2">
+              {doc.tags.slice(0, 3).map((tag) => (
+                <span
+                  className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 ring-1 ring-emerald-100"
+                  key={tag}
+                >
+                  {tag}
+                </span>
+              ))}
+              <time className="text-xs text-slate-400" dateTime={doc.date}>
+                {formatDate(doc.date)}
+              </time>
+            </span>
+          </Link>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function DocArticle({ activeDoc }: { activeDoc: DocArticle }) {
+  return (
+    <article className="min-w-0 rounded-xl border border-gray-200 bg-white/95 p-5 shadow-sm backdrop-blur md:p-8 lg:p-10">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+        <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1 font-medium text-blue-700 ring-1 ring-blue-100">
+          <FolderOpen className="size-4" />
+          {activeDoc.group}
+        </span>
+        <time
+          className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1 text-slate-500"
+          dateTime={activeDoc.date}
+        >
+          <CalendarDays className="size-4" />
+          {formatDate(activeDoc.date)}
+        </time>
+      </div>
+
+      <header className="mt-5 border-b border-slate-100 pb-6">
+        <h1 className="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
+          {activeDoc.title}
+        </h1>
+        <p className="mt-3 max-w-3xl text-base leading-7 text-slate-500">
+          {activeDoc.summary}
+        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500">
+            <Tags className="size-4" />
+            标签
+          </span>
+          {activeDoc.tags.map((tag) => (
+            <span
+              className="rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-100"
+              key={tag}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </header>
+
+      <div className="markdown-body">
+        <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
+          {activeDoc.content}
+        </ReactMarkdown>
+      </div>
+    </article>
   );
 }
 

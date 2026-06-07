@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { DocsShell } from "@/components/docs-shell";
 import { SiteHeader } from "@/components/site-header";
-import { getDocGroupTree, getFirstDoc } from "@/lib/docs";
+import { getDocGroupTree } from "@/lib/docs";
 
 export const metadata: Metadata = {
   title: "AI 文档 | 一者",
@@ -10,16 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default function DocsPage() {
-  const activeDoc = getFirstDoc();
-
-  if (!activeDoc) {
-    notFound();
-  }
-
   return (
     <>
       <SiteHeader activeHref="/docs" />
-      <DocsShell activeDoc={activeDoc} groupTree={getDocGroupTree()} />
+      <DocsShell groupTree={getDocGroupTree()} />
     </>
   );
 }
