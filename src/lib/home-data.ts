@@ -9,18 +9,25 @@ import {
   Search,
 } from "lucide-react";
 
+export type SearchDocument = {
+  title: string;
+  description: string;
+  type: string;
+  href?: string;
+};
+
 export const navItems = [
-  { label: "AI生成", href: "#ai-generation" },
-  { label: "AI文档", href: "#docs" },
-  { label: "在线工具", href: "#tools" },
-  { label: "一站式导航", href: "#navigation" },
+  { label: "AI生成", href: "/#ai-generation" },
+  { label: "AI文档", href: "/docs" },
+  { label: "在线工具", href: "/#tools" },
+  { label: "一站式导航", href: "/#navigation" },
 ];
 
 export const quickLinks = [
-  { label: "AI生成", href: "#ai-generation" },
-  { label: "AI文档", href: "#docs" },
-  { label: "在线工具", href: "#tools" },
-  { label: "一站式导航", href: "#navigation" },
+  { label: "AI生成", href: "/#ai-generation" },
+  { label: "AI文档", href: "/docs" },
+  { label: "在线工具", href: "/#tools" },
+  { label: "一站式导航", href: "/#navigation" },
 ];
 
 export const latestDocs = [
@@ -28,25 +35,29 @@ export const latestDocs = [
     title: "AI Skills 是什么，如何用于日常工作流",
     category: "AI Skills",
     summary: "用任务、输入、输出和验收标准组织 AI 能力，减少重复提示词。",
-    date: "今天",
+    date: "2026-06-05",
+    href: "/docs/skills-template",
   },
   {
     title: "新手如何搭建自己的提示词素材库",
-    category: "AI 提示词",
+    category: "提示词",
     summary: "从场景、角色、约束、示例四个层级整理可复用提示词。",
-    date: "昨天",
+    date: "2026-06-06",
+    href: "/docs/prompt-library-structure",
   },
   {
-    title: "内容创作者常用的 AI 写作检查清单",
-    category: "AI 教程",
-    summary: "把选题、标题、结构、语气和事实核查拆成稳定流程。",
-    date: "本周",
+    title: "AI 入门工作流：从问题到可复用流程",
+    category: "AI教程",
+    summary: "适合新手把一次性提问升级为稳定的 AI 协作流程。",
+    date: "2026-06-07",
+    href: "/docs/ai-tutorial-workflow",
   },
   {
-    title: "在线工具板块第一批工具规划",
-    category: "工具规划",
-    summary: "优先做浏览器本地运行的小工具，避免过早增加服务器压力。",
-    date: "本周",
+    title: "Codex 协作文档：从需求到验收",
+    category: "Codex",
+    summary: "用明确目标、上下文和验收方式，让 Codex 更稳定地完成开发任务。",
+    date: "2026-06-04",
+    href: "/docs/codex-doc-workflow",
   },
 ];
 
@@ -141,16 +152,18 @@ export const utilityTools = [
   { name: "资源清单整理", tag: "导航辅助", icon: Boxes },
 ];
 
-export const searchDocuments = [
+export const searchDocuments: SearchDocument[] = [
   ...latestDocs.map((item) => ({
     title: item.title,
     description: item.summary,
     type: item.category,
+    href: item.href,
   })),
   ...quickLinks.map((item) => ({
     title: item.label,
     description: "首页核心入口",
     type: "核心入口",
+    href: item.href,
   })),
   ...aiGenerationTools.map((item) => ({
     title: item.title,

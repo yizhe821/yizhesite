@@ -266,7 +266,7 @@ export function SearchPanel() {
                 siteResults.map((item) => (
                   <a
                     className="rounded-lg border border-blue-100 bg-white p-3 transition-all duration-200 hover:border-blue-200 hover:bg-blue-50/60 hover:shadow-sm"
-                    href="#"
+                    href={item.href ?? "#"}
                     key={`${item.type}-${item.title}`}
                   >
                     <span className="text-xs font-medium text-blue-700">{item.type}</span>

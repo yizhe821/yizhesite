@@ -6,9 +6,9 @@ import {
 } from "lucide-react";
 import { AiGenerationSection } from "@/components/ai-generation-section";
 import { SearchPanel } from "@/components/search-panel";
+import { SiteHeader } from "@/components/site-header";
 import {
   latestDocs,
-  navItems,
   quickLinks,
   siteNavigationLinks,
   utilityTools,
@@ -19,33 +19,7 @@ export default function Home() {
     <main className="relative min-h-screen overflow-hidden bg-slate-50 text-slate-950">
       <AmbientBackground />
 
-      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-6 lg:px-8">
-          <a className="flex items-center gap-3" href="#">
-            <span className="flex size-10 items-center justify-center rounded-lg bg-blue-600 text-base font-semibold text-white shadow-sm">
-              一
-            </span>
-            <span>
-              <span className="block text-base font-semibold tracking-tight text-slate-950">
-                一者
-              </span>
-              <span className="block text-xs text-slate-500">AI 工具与知识入口</span>
-            </span>
-          </a>
-
-          <nav className="hidden items-center gap-1 md:flex" aria-label="主导航">
-            {navItems.map((item) => (
-              <a
-                className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-slate-100 hover:text-slate-950"
-                href={item.href}
-                key={item.label}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       <section className="relative z-40 px-4 py-8 md:px-6 md:py-10 lg:px-8 lg:py-12">
         <div className="mx-auto max-w-4xl">
@@ -81,7 +55,7 @@ export default function Home() {
                 {latestDocs.map((doc) => (
                   <a
                     className="group block cursor-pointer border-b border-gray-100 px-4 py-3.5 transition-colors duration-200 last:border-b-0 hover:bg-blue-50/60"
-                    href="#"
+                    href={doc.href}
                     key={doc.title}
                   >
                     <span className="mb-1.5 inline-flex rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 ring-1 ring-emerald-100">

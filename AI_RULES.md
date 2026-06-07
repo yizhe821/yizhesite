@@ -753,8 +753,9 @@ AI 工具盈利方向：
 
 本地开发注意事项：
 
-- 如果浏览器控制台持续输出 Next.js HMR WebSocket 连接失败，先重启本地 dev server 并刷新页面。
-- 当前已验证 `ws://127.0.0.1:3000/_next/webpack-hmr` 可被 Node WebSocket 客户端正常连接；若仅浏览器控制台报错，优先按本地浏览器或旧 dev client 状态处理。
+- 如果浏览器控制台持续输出 Next.js HMR WebSocket 连接失败，必须先查看 dev server stderr 日志；Next.js 16 会默认阻止未加入白名单的开发源访问 `/_next/webpack-hmr`。
+- 本项目本地开发常用访问地址为 `http://127.0.0.1:3000`，因此 `next.config.ts` 必须保留 `allowedDevOrigins: ["127.0.0.1"]`，避免 HMR 被 Next dev origin 防护拦截。
+- 修改 `next.config.ts` 后必须重启本地 dev server，刷新页面后再判断 HMR 是否恢复。
 - 需要无 HMR 干扰的纯预览时，可使用 `npm run build` 后运行生产预览服务。
 
 本地开发命令：
